@@ -41,8 +41,7 @@ int searchInsert(int *nums, int numsSize, int target)
         return target > nums[0] ? 1 : 0;
     }
 
-    int max = numsSize - 1;
-    int low = 0, high = max, mid;
+    int low = 0, high = numsSize - 1, mid;
     while (low <= high)
     {
         // 取中间位置
@@ -51,7 +50,8 @@ int searchInsert(int *nums, int numsSize, int target)
             // 查找成功返回所在的位置
             return mid;
         else if (nums[mid] > target)
-        { // 从前部分查找
+        {
+            // 从前部分查找
             high = mid - 1;
         }
         else
@@ -70,6 +70,7 @@ int searchInsert(int *nums, int numsSize, int target)
     //     return numsSize;
     // }
 
+    // 从这里可以看出，low始终返回可以插入 本属于这个不重复数组中的位置
     return low;
 }
 
