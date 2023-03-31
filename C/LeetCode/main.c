@@ -3,14 +3,13 @@
 
 int main()
 {
-  printf("hello world");
-  _Bool a = (1 == 1);
-  bool b = true;
-  if (a == b)
-  {
-    printf("true");
-  }
+  const char c0 = '0';
+  char c1 = '1';
+  char c2 = '9';
+  printf("1:%d\n", c1 - c0);
+  ;
 
-  int i = 2;
-  return 0;
+  char a[9] = {'.'};
+
+    return 0;
 }
