@@ -48,7 +48,7 @@ Constraints:
     创建一个长度为9的数组，横向遍历，把数字转成下标给数组对应的数字置为1，如果有重复则返回false
 */
 
-#include <stdio.h>>
+#include <stdio.h>
 #include <stdbool.h>
 #include <string.h>
 
