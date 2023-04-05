@@ -112,6 +112,52 @@ int lengthOfLongestSubstring_eg(char *s)
 	return sub_str_len;
 }
 
+//
+int lengthOfLongestSubstring_me2(char *s)
+{
+	/**
+	 * 一趟遍历，map数组每次记录字符的下标，如果下标map[i]有值，且比子串初始位置大，则说明有字母重复
+	 * 则从map[i]的下一个字符到i还是字符不重复子串，修改子串初始位置start为map[i]+1，继续从x开始找下一个最长的字符
+	 */
+	if (strlen(s) == 0)
+	{
+		return 0;
+	}
+
+	short map[256], i, j;
+	int cnt, maxLength, start;
+
+	for (i = 0; i < 256; i++)
+	{
+		map[i] = -1;
+	}
+
+	i = start = cnt = maxLength = 0;
+
+	while (s[i] != '\0')
+	{
+		j = map[s[i]];
+		if (j == -1 || j < start)
+		{
+			cnt++;
+		}
+		else
+		{
+			if (cnt > maxLength)
+			{
+				maxLength = cnt;
+			}
+			start = j + 1;
+			cnt = i - j;
+		}
+
+		map[s[i]] = i;
+		i++;
+	}
+
+	return cnt > maxLength ? cnt : maxLength;
+}
+
 int main(int argc, char **argv)
 {
 	char *egs[] = {
@@ -125,9 +171,9 @@ int main(int argc, char **argv)
 		"bbbbb",
 		"pwwkew"};
 
-	for (size_t i = 0, len = sizeof(egs) / sizeof(egs[0]); i < len; i++)
+	for (size_t i = 0, len = strlen(egs[i]); i < len; i++)
 	{
-		printf("%s : %d me: %d\n", egs[i], lengthOfLongestSubstring_eg(egs[i]), lengthOfLongestSubstring_me(egs[i]));
+		printf("%s : %d me: %d\n", egs[i], lengthOfLongestSubstring_0ms(egs[i]), lengthOfLongestSubstring_me2(egs[i]));
 	}
 
 	return 0;

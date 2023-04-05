@@ -108,7 +108,6 @@ char *countAndSay(int n)
             }
             else
             {
-                // 扩充字符串
                 result[k++] = count + '0';
                 result[k++] = str[j - 1];
                 // 重置计数字符
