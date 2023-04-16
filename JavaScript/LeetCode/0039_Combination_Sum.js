@@ -96,7 +96,6 @@ var combinationSum_fastest = function (candidates, target) {
   var len = candidates.length;
   //
   var permute = (arr, sum, idx) => {
-    console.log(arr);
     if (sum === target) {
       result.push(arr);
       return;
@@ -125,9 +124,48 @@ var combinationSum_fastest = function (candidates, target) {
    [2, 2]
    [2, 2, 2]
    [7]
+*/
+};
 
-  
+/** */
+var combinationSum_fastest2 = function (candidates, target) {
+  var result = [];
+  var len = candidates.length;
 
+  // 不需要排序，题目已经保证了每个数字只会出现一次（distinct）
+  // candidates = candidates.sort((a, b) => b - a);
+
+  //
+  var traverse = (arr, remain, idx) => {
+    console.log(arr);
+    if (remain === 0) {
+      result.push(arr);
+      return;
+    }
+
+    for (var i = idx; i < len; i++) {
+      if (remain < candidates[i]) {
+        break;
+      }
+      traverse(arr.concat(candidates[i]), remain - candidates[i], i);
+    }
+  };
+
+  traverse([], target, 0);
+  return result;
+
+  /*
+  递归过程，
+    []
+    [5]
+    [3]
+    [3, 3]
+    [3, 2]
+    [3, 2, 2]
+    [2]
+    [2, 2]
+    [2, 2, 2]
+    [7]
 */
 };
 
@@ -147,7 +185,7 @@ var combinationSum_fastest = function (candidates, target) {
     // { input: [2], target: 1, output: [] },
   ];
 
-  testcase.forEach((x) => console.log(combinationSum_fastest(x.input, x.target)));
+  testcase.forEach((x) => console.log(combinationSum_fastest2(x.input, x.target)));
 })();
 
 // function a() {
