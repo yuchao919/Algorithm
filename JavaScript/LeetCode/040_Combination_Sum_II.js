@@ -45,14 +45,14 @@ var combinationSum2 = function (candidates, target) {
 
   var permute = function (arr, sum, idx) {
     if (sum === target) {
-      //   // 排序
-      //   arr = arr.sort(function (a, b) {
-      //     return a - b;
-      //   });
-      //   // 判断去重
-      //   if (!result.some((x) => x.toString() === arr.toString())) {
-      //     result.push(arr);
-      //   }
+      // 排序
+      arr = arr.sort(function (a, b) {
+        return a - b;
+      });
+      // 判断去重
+      if (!result.some((x) => x.toString() === arr.toString())) {
+        result.push(arr);
+      }
       result.push(arr);
       return;
     }

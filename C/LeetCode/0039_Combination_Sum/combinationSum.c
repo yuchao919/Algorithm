@@ -35,6 +35,8 @@
         1 <= target <= 40
 */
 
+#include <stdio.h>
+
 /**
  * Return an array of arrays of size *returnSize.
  * The sizes of the arrays are returned as *returnColumnSizes array.
@@ -42,5 +44,11 @@
  */
 int **combinationSum(int *candidates, int candidatesSize, int target, int *returnSize, int **returnColumnSizes)
 {
-    
+}
+
+int main()
+{
+    printf("hello world!\n");
+
+    return 0;
 }
