@@ -50,10 +50,14 @@ int findSmallest(int *nums, int end)
 
 int jump(int *nums, int numsSize)
 {
+    if (numsSize == 0 || numsSize == 1)
+    {
+        return 0;
+    }
 
     int i = 1;
     int end = numsSize - 1;
-    while (i <= 104)
+    while (i < numsSize)
     {
         int p = findSmallest(nums, end);
         if (p == 0)
@@ -64,7 +68,7 @@ int jump(int *nums, int numsSize)
         i++;
     }
 
-    return 104;
+    return numsSize;
 }
 
 int main()
