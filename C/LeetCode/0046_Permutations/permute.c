@@ -34,6 +34,211 @@ Constraints:
  */
 int **permute(int *nums, int numsSize, int *returnSize, int **returnColumnSizes)
 {
+    int count = 1;
+    for (int i = 1; i <= numsSize; i++)
+    {
+        count = count * i;
+    }
+    *returnSize = count;
+    *returnColumnSizes = (int *)malloc(sizeof(int) * count);
+    for (int i = 0; i < count; i++)
+    {
+        (*returnColumnSizes)[i] = numsSize;
+    }
+
+    int **result = (int **)malloc(sizeof(int *) * count);
+
+    // 现在可以得出循环的过程[0,...,0]这里有numsSize列，每一个位都算作numSize进制，
+    // 从最后一个位开始，不停地加1，当其等于numSize时上一位+1，直至所有位置都等于[numSize-1]，等同于numSize进制加法
+    // 在累加的过程中，如果一个数组没一位各不相等，则属于有效数组，将其值记录到result中
+    // 一开始可以是[0,1,2,3...,numSize-1];
+
+    int *indexArr = (int *)malloc(sizeof(int) * numsSize);
+    for (int i = 0; i < numsSize; i++)
+    {
+        indexArr[i] = i;
+    }
+
+    int cnt = 0;
+    int end = numsSize - 1;
+    // 判断所有位都变成numSize - 1 就结束
+    int isFinish = 0;
+    while (isFinish == 0)
+    {
+        int isValid = 1;
+        for (int i = 0; i < numsSize; i++)
+        {
+            for (int j = i + 1; j < numsSize; j++)
+            {
+                if (indexArr[i] == indexArr[j])
+                {
+                    isValid = 0;
+                    break;
+                }
+            }
+            if (isValid == 0)
+            {
+                break;
+            }
+        }
+
+        if (isValid == 1)
+        {
+            int *item = (int *)malloc(sizeof(int) * numsSize);
+            for (int i = 0; i < numsSize; i++)
+            {
+                item[i] = nums[indexArr[i]];
+            }
+
+            result[cnt++] = item;
+        }
+
+        // 末尾一位+1，如果触发进位则上一位再+1，直至到顶
+        int cur = end;
+        indexArr[cur]++;
+        while (cur > 0)
+        {
+            if (indexArr[cur] == numsSize)
+            {
+                indexArr[cur] = 0;
+                indexArr[cur - 1]++;
+            }
+
+            cur--;
+        }
+
+        // 默认结束
+        isFinish = 1;
+        for (int i = 0; i < numsSize; i++)
+        {
+            if (indexArr[i] < end)
+            {
+                isFinish = 0;
+                break;
+            }
+        }
+    }
+
+    return result;
+}
+
+int main()
+{
+    // int nums[3] = {1, 2, 3};
+    // int returnSize;
+    // int **returnColumnSizes = (int **)malloc(sizeof(int *) * 2000);
+
+    int nums[] = {1};
+    int returnSize;
+    int **returnColumnSizes = (int **)malloc(sizeof(int *) * 2000);
+
+    int **result = permute(nums, sizeof(nums) / sizeof(int), &returnSize, returnColumnSizes);
+
+    return 0;
+}
+
+// 判断下标数组是否合法
+int isValid(int indexArr[], int numsSize)
+{
+    for (int i = 0; i < numsSize; i++)
+    {
+        for (int j = i + 1; j < numsSize; j++)
+        {
+            if (indexArr[i] == indexArr[j])
+            {
+                return 0;
+            }
+        }
+    }
+
+    return 1;
+}
+
+// 下标数组+1
+void plus(int indexArr[], int numsSize, int end)
+{
+    int cur = end;
+    indexArr[cur]++;
+
+    while (cur > 0)
+    {
+        if (indexArr[cur] == numsSize)
+        {
+            indexArr[cur] = 0;
+            indexArr[cur - 1]++;
+        }
+
+        cur--;
+    }
+}
+
+// 是否结束
+int isFinish(int indexArr[], int numsSize, int end)
+{
+    for (int i = 0; i < numsSize; i++)
+    {
+        if (indexArr[i] < end)
+        {
+            return 0;
+        }
+    }
+
+    return 1;
+}
+
+// 貌似是说传递 indexArr这个会导致有问题
+// Line 207: Char 3: runtime error: load of misaligned address 0xbebebebebebebebe for type 'int', which requires 4 byte alignment [__Serializer__.c]
+// 0xbebebebebebebebe: note: pointer points here
+// <memory cannot be printed>
+int **permute_memory_cannot_be_printed(int *nums, int numsSize, int *returnSize, int **returnColumnSizes)
+{
+    *returnSize = 1;
+    for (int i = 1; i <= numsSize; i++)
+    {
+        *returnSize = *returnSize * i;
+    }
+    *returnColumnSizes = (int *)malloc(sizeof(int) * (*returnSize));
+    for (int i = 0; i < (*returnSize); i++)
+    {
+        (*returnColumnSizes)[i] = numsSize;
+    }
+
+    int **result = (int **)malloc(sizeof(int *) * (*returnSize));
+
+    // 现在可以得出循环的过程[0,...,0]这里有numsSize列，每一个位都算作numSize进制，
+    // 从最后一个位开始，不停地加1，当其等于numSize时上一位+1，直至所有位置都等于[numSize-1]，等同于numSize进制加法
+    // 在累加的过程中，如果一个数组没一位各不相等，则属于有效数组，将其值记录到result中
+    // 一开始可以是[0,1,2,3...,numSize-1];
+
+    int *indexArr = (int *)malloc(sizeof(int) * numsSize);
+    for (int i = 0; i < numsSize; i++)
+    {
+        indexArr[i] = i;
+    }
+
+    int cnt = 0;
+    int end = numsSize - 1;
+    while (isFinish(indexArr, numsSize, end) == 0)
+    {
+        if (isValid(indexArr, numsSize) == 1)
+        {
+            int *item = (int *)malloc(sizeof(int) * numsSize);
+            for (int i = 0; i < numsSize; i++)
+            {
+                item[i] = nums[indexArr[i]];
+            }
+
+            result[cnt++] = item;
+        }
+
+        plus(indexArr, numsSize, end);
+    }
+
+    return result;
+}
+
+int **permute_direct(int *nums, int numsSize, int *returnSize, int **returnColumnSizes)
+{
     *returnSize = 1;
     for (int i = 1; i <= numsSize; i++)
     {
@@ -141,75 +346,3 @@ int **permute(int *nums, int numsSize, int *returnSize, int **returnColumnSizes)
 
     return result;
 }
-
-int main()
-{
-    int nums[3] = {1, 2, 3};
-    int returnSize;
-    int **returnColumnSizes = (int **)malloc(sizeof(int *) * 2000);
-
-    int **result = permute(nums, 3, &returnSize, returnColumnSizes);
-
-    return 0;
-}
-
-// var len = nums.length;
-
-// var indexes = [];
-
-// for (var n1 = 0; n1 < len; n1++) {
-//     if (len === 1) {
-//         indexes.push([n1]);
-//     }
-//     for (var n2 = 0; n2 < len; n2++) {
-//         if (n2 === n1) {
-//             continue;
-//         }
-//         if (len === 2) {
-//             indexes.push([n1, n2]);
-//         }
-//         for (var n3 = 0; n3 < len; n3++) {
-//             if (n3 === n2 || n3 === n1) {
-//                 continue;
-//             }
-//             if (len === 3) {
-//                 indexes.push([n1, n2, n3]);
-//             }
-//             for (var n4 = 0; n4 < len; n4++) {
-//                 if (n4 === n3 || n4 === n2 || n4 === n1) {
-//                     continue;
-//                 }
-//                 if (len === 4) {
-//                     indexes.push([n1, n2, n3, n4]);
-//                 }
-//                 for (var n5 = 0; n5 < len; n5++) {
-//                     if (n5 === n4 || n5 === n3 || n5 === n2 || n5 === n1) {
-//                         continue;
-//                     }
-//                     if (len === 5) {
-//                         indexes.push([n1, n2, n3, n4, n5]);
-//                     }
-//                     for (var n6 = 0; n6 < len; n6++) {
-//                         if (n6 === n5 || n6 === n4 || n6 === n3 || n6 === n2 || n6 === n1) {
-//                             continue;
-//                         }
-//                         if (len === 6) {
-//                             indexes.push([n1, n2, n3, n4, n5, n6]);
-//                         }
-//                     }
-//                 }
-//             }
-//         }
-//     }
-// }
-
-// var result = [];
-// for (var item of indexes) {
-//     var data = [];
-//     for (var i of item) {
-//         data.push(nums[i]);
-//     }
-//     result.push(data);
-// }
-
-// return result;
